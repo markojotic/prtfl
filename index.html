@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Marko's Space</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --gap: 20px; --columns: 8; --text: #000; --bg: #fff; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, 'Apple Color Emoji', 'Segoe UI Emoji'; scroll-behavior: auto; }
+
+    .page { width: 100vw; box-sizing: border-box; padding: var(--gap); }
+    .grid { display: grid; grid-template-columns: repeat(var(--columns), 1fr); gap: var(--gap); }
+
+    .brand { font-size: 16px; font-weight: 500; line-height: 1.2; grid-column: 1 / span 2; }
+    .about { font-size: 16px; font-weight: 500; line-height: 1.35; grid-column: 1 / span 4; }
+    .email { font-size: 16px; font-weight: 500; line-height: 1.35; grid-column: 1 / span 2; }
+    .email a { color: inherit; text-decoration: underline; }
+
+    .works { margin-top: var(--gap); }
+    .works .grid { align-items: start; }
+
+    .work { width: 100%; padding: 0; border: none; cursor: pointer; display: block; transition: transform 0.2s ease; background-color:#fff; }
+    .work:hover { transform: scale(0.99); }
+    .work:focus { outline: none; }
+    .work img { width: 100%; height: auto; display: block; object-fit: contain; }
+    .work video { width: 100%; height: auto; display: block; object-fit: contain; }
+
+    .ar-1x1 { /* aspect disabled to preserve original image ratio */ }
+    .ar-4x3 { /* aspect disabled to preserve original image ratio */ }
+    .ar-3x4 { /* aspect disabled to preserve original image ratio */ }
+    .ar-16x9 { /* aspect disabled to preserve original image ratio */ }
+    .ar-9x16 { /* aspect disabled to preserve original image ratio */ }
+    .ar-21x9 { /* aspect disabled to preserve original image ratio */ }
+    .ar-3x2 { /* aspect disabled to preserve original image ratio */ }
+    .ar-2x3 { /* aspect disabled to preserve original image ratio */ }
+
+    @media (max-width: 1024px) { :root { --columns: 4; } .about { grid-column: 1 / span 4; } .email { grid-column: 1 / span 2; } }
+    @media (max-width: 640px)  { :root { --columns: 2; } .about { grid-column: 1 / span 2; } .email { grid-column: 1 / span 2; } }
+
+    .lightbox { position: fixed; inset: 0; background: rgba(0,0,0,0.9); color: #fff; display: none; align-items: center; justify-content: center; z-index: 1000; }
+    .lightbox.is-open { display: flex; }
+    .lightbox__img { max-width: 90vw; max-height: 90vh; width: auto; height: auto; display: block; box-shadow: 0 8px 32px rgba(0,0,0,0.4); background: #111; }
+    .lightbox__controls { position: absolute; inset: 0; display: flex; align-items: center; justify-content: space-between; pointer-events: none; }
+    .lightbox__btn { pointer-events: auto; background: transparent; border: 0; color: #fff; font-size: 32px; padding: 12px 16px; cursor: pointer; user-select: none; }
+    .lightbox__close { position: absolute; top: 12px; right: 12px; font-size: 28px; background: transparent; border: 0; color: #fff; cursor: pointer; padding: 8px; }
+
+
+    /* Fullscreen overlay */
+#preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #ffffff; /* background color */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+/* Simple spinner */
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #ddd;
+  border-top-color: #000;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* fade out effect */
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+  </style>
+</head>
+<script>
+  window.addEventListener("load", function () {
+    const loader = document.getElementById("preloader");
+    loader.classList.add("fade-out");
+    setTimeout(() => {
+      loader.style.display = "none";
+    }, 500);
+  });
+</script>
+<body>
+  <div id="preloader">
+    <div class="spinner"></div>
+  </div>
+  <!-- Seamless loop wrapper: three stacked copies of the same content -->
+  <div id="loop">
+    <div class="loop-content">
+      <main class="page">
+        <section class="grid" aria-label="Intro">
+          <div class="brand">Marko's Space</div>
+          <div class="about">I’m Marko Jotić — a curious designer aiming to create work that is honest, useful, and visually appealing. As a design generalist, I enjoy working across branding, web design, research, ux, and product design.</div>
+          <div class="email"><a href="mailto:marko@example.com">Email</a></div>
+        </section>
+
+        <section class="works" aria-label="Works">
+          <div class="grid worksGrid">
+            <!-- 64 items (8 rows x 8 columns). To change images later, simply edit each src below. -->
+            <button class="work ar-3x2"><img src="works/typout-1.jpg" alt="Work 1"></button>
+            <button class="work ar-1x1"><img src="works/typout-2.jpg" alt="Work 2"></button>
+            <button class="work ar-16x9"><img src="works/typout-3.jpg" alt="Work 3"></button>
+            <button class="work ar-3x4"><img src="works/typout-4.jpg" alt="Work 4"></button>
+            <button class="work ar-2x3"><img src="works/typout-5.jpg" alt="Work 5"></button>
+            <button class="work ar-4x3"><img src="works/typout-6.jpg" alt="Work 6"></button>
+            <button class="work ar-21x9"><img src="works/typout-7.jpg" alt="Work 7"></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/typout-8.mp4" type="video/mp4"></video></button>
+
+            <button class="work ar-3x2"><img src="works/gall-1.jpg" alt="Work 1"></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/gall-2.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/gall-3.mp4" type="video/mp4"></video></button>
+            <button class="work ar-3x4"><img src="works/gall-4.jpg" alt="Work 4"></button>
+            <button class="work ar-21x9"><img src="works/gall-5.jpg" alt="Work 5"></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/gall-6.mp4" type="video/mp4"></video></button>
+            <button class="work ar-21x9"><img src="works/wolky-1.jpg" alt="Work 7"></button>
+            <button class="work ar-9x16"><img src="works/wolky-2.jpg" alt="Work 8"></button>
+
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/wolky-4.mp4" type="video/mp4"></video></button>
+            <button class="work ar-9x16"><img src="works/wolky-3.jpg" alt="Work 8"></button>
+            <button class="work ar-9x16"><img src="works/wolky-6.jpg" alt="Work 8"></button>
+            <button class="work ar-21x9"><img src="works/brainka-1.jpg" alt="Work 7"></button>
+            <button class="work ar-21x9"><img src="works/brainka-2.jpg" alt="Work 7"></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/brainka-3.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/books-1.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/books-2.mp4" type="video/mp4"></video></button>
+
+
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/whatif-1.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/whatif-2.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/animation-6.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/animation-1.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/animation-2.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/animation-3.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/animation-4.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/animation-5.mp4" type="video/mp4"></video></button>
+
+
+            <button class="work ar-16x9"><img src="works/lumo-1.jpg" alt="Work 35"></button>
+            <button class="work ar-1x1"><img src="works/leaderboard-1.jpg" alt="Work 42"></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/mm-animation-1.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><img src="works/mm-website.jpg" alt="Work 42"></button>
+            <button class="work ar-1x1"><img src="works/mm-logo.jpg" alt="Work 42"></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/showcase-1.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/primecuts-1.mp4" type="video/mp4"></video></button>
+            <button class="work ar-1x1"><video autoplay loop muted playsinline><source src="works/jobs-1.mp4" type="video/mp4"></video></button>
+
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Image viewer">
+    <button class="lightbox__close" id="lbClose" aria-label="Close">✕</button>
+    <img class="lightbox__img" id="lbImg" alt="Expanded work">
+    <video class="lightbox__img" id="lbVideo" controls playsinline style="display:none"></video>
+    <div class="lightbox__controls">
+      <button class="lightbox__btn" id="lbPrev" aria-label="Previous">◀</button>
+      <button class="lightbox__btn" id="lbNext" aria-label="Next">▶</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      // ===== Seamless infinite vertical loop =====
+      const loop = document.getElementById('loop');
+      const original = loop.querySelector('.loop-content');
+      const before = original.cloneNode(true);
+      const after = original.cloneNode(true);
+      loop.insertBefore(before, original);
+      loop.appendChild(after);
+
+      function baseHeight() { return original.getBoundingClientRect().height; }
+      function jumpToMiddle(offset=0) {
+        const topOfMiddle = before.getBoundingClientRect().height; // same as baseHeight
+        window.scrollTo(0, topOfMiddle + offset);
+      }
+      requestAnimationFrame(jumpToMiddle);
+      window.addEventListener('load', jumpToMiddle);
+      window.addEventListener('resize', () => { jumpToMiddle(); });
+
+      window.addEventListener('scroll', () => {
+        const bh = baseHeight();
+        const y = window.scrollY;
+        const startMiddle = bh;
+        const endMiddle = 2 * bh;
+        if (y < startMiddle)      window.scrollTo(0, y + bh);
+        else if (y >= endMiddle)  window.scrollTo(0, y - bh);
+      }, { passive: true });
+
+      // ===== Lightbox (delegated so it works in clones) =====
+      const lightbox = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbPrev = document.getElementById('lbPrev');
+      const lbNext = document.getElementById('lbNext');
+      const lbClose = document.getElementById('lbClose');
+      let currentIndex = 0;
+
+      function mediaAll() { return Array.from(document.querySelectorAll('.work img, .work video')); }
+
+      function openAt(i) {
+        const medias = mediaAll();
+        if (!medias[i]) return;
+        currentIndex = i;
+        const el = medias[i];
+        if (el.tagName === 'IMG') {
+          lbVideo.pause(); lbVideo.removeAttribute('src'); lbVideo.style.display = 'none';
+          lbImg.style.display = 'block';
+          lbImg.src = el.src;
+        } else { // VIDEO
+          lbImg.removeAttribute('src'); lbImg.style.display = 'none';
+          lbVideo.style.display = 'block';
+          lbVideo.src = el.currentSrc || el.src;
+          // Autoplay safely without sound
+          lbVideo.muted = true; lbVideo.play().catch(()=>{});
+        }
+        lightbox.classList.add('is-open');
+        lightbox.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeBox() {
+        lightbox.classList.remove('is-open');
+        lightbox.setAttribute('aria-hidden', 'true');
+        document.body.style.overflow = '';
+        lbImg.removeAttribute('src');
+        lbVideo.pause();
+        lbVideo.removeAttribute('src');
+        lbVideo.style.display = 'none';
+        lbImg.style.display = 'block';
+      }
+      function next() { const medias = mediaAll(); openAt((currentIndex + 1) % medias.length); }
+      function prev() { const medias = mediaAll(); openAt((currentIndex - 1 + medias.length) % medias.length); }
+
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.work');
+        if (!btn) return;
+        const media = btn.querySelector('img, video');
+        const medias = mediaAll();
+        const idx = medias.indexOf(media);
+        if (idx !== -1) openAt(idx);
+      });
+      lbNext.addEventListener('click', next);
+      lbPrev.addEventListener('click', prev);
+      lbClose.addEventListener('click', closeBox);
+      document.getElementById('lightbox').addEventListener('click', (e) => { if (e.target === e.currentTarget) closeBox(); });
+      document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('is-open')) return;
+        if (e.key === 'ArrowRight') next();
+        else if (e.key === 'ArrowLeft') prev();
+        else if (e.key === 'Escape') closeBox();
+      });
+    })();
+  </script>
+</body>
+</html>
